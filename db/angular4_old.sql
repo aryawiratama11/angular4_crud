@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2017 at 07:14 PM
+-- Generation Time: Dec 06, 2017 at 01:09 PM
 -- Server version: 5.7.20-0ubuntu0.16.04.1
 -- PHP Version: 7.0.22-0ubuntu0.16.04.1
 
@@ -30,7 +30,6 @@ CREATE TABLE `items` (
   `id` int(10) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -39,14 +38,13 @@ CREATE TABLE `items` (
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`id`, `title`, `description`, `avatar`, `created_at`, `updated_at`) VALUES
-(1, 'Narendra 12', 'test', NULL, NULL, NULL),
-(3, 'Dev', 'test', NULL, NULL, NULL),
-(4, 'hello', 'test', NULL, NULL, NULL),
-(5, 'wrqwer', 'werwer', NULL, NULL, NULL),
-(6, 'wrqwer2', 'werwer2', NULL, NULL, NULL),
-(7, 'wrqwer23', 'werwer23', NULL, NULL, NULL),
-(8, 'Name title', 'Description', NULL, NULL, NULL);
+INSERT INTO `items` (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'Narendra 12', 'test', NULL, NULL),
+(3, 'Dev', 'test', NULL, NULL),
+(4, 'hello', 'test', NULL, NULL),
+(5, 'wrqwer', 'werwer', NULL, NULL),
+(6, 'wrqwer2', 'werwer2', NULL, NULL),
+(7, 'wrqwer23', 'werwer23', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -66,7 +64,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
