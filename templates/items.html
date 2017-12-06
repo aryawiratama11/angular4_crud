@@ -1,34 +1,46 @@
 <style type="text/css">
     .modal-backdrop {
-    /* bug fix - no overlay */    
-    display: none;    
-}
+        /* bug fix - no overlay */    
+        display: none;    
+    }
+
+    .input-group-addon {
+        background: white !important;
+
+    }
+    .input-group-addon:last-child {
+        border-left: 0 !important;
+    }
 </style>
 <div class="row">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h1 style="color:#3276B1"><strong>AngularJS 4 (ND)</h1>
         </div>
+
         <div class="pull-right" style="padding-top:30px">
             <div class="box-tools" style="display:inline-table">
               <div class="input-group">
                   <input type="text" class="form-control input-sm ng-valid ng-dirty" placeholder="Search" ng-change="searchDB()" ng-model="searchText" name="table_search" title="" tooltip="" data-original-title="Min character length is 3">
-                  <span class="input-group-addon">Search</span>
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-search"></span>
+                    </span>
               </div>
             </div>
-            <button class="btn btn-success" data-toggle="modal" data-target="#create-user">Create New</button>
+            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#create-user"><span class="glyphicon glyphicon-plus"></span> Add</button>
         </div>
     </div>
 </div>
+<flash-message duration="3000" show-close="true"></flash-message>
 
-
-<table class="table table-bordered pagin-table">
-    <thead>
+<table class="table  pagin-table table-striped">
+    <thead class="thead-inverse">
         <tr>
             <th>No</th>
             <th>ID</th>
             <th>Title</th>
             <th>Description</th>
+            <th>Avatar</th>
             <th width="220px">Action</th>
         </tr>
     </thead>
@@ -39,8 +51,13 @@
             <td>{{ value.title }}</td>
             <td>{{ value.description }}</td>
             <td>
-            <button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn btn-primary">Edit</button>
-            <button ng-click="remove(value,$index)" class="btn btn-danger">Delete</button>
+                <img ng-hide="!value.avatar.length" ng-src="{{'images/'+value.avatar}}" style="width:50px;" />
+                <span class="glyphicon glyphicon-trash" ng-hide="!value.avatar.length" ng-click="removeImage(value)"></span>
+                <button ng-show="!value.avatar.length" data-toggle="modal" data-target="#avatar-data" class="btn btn-danger" ng-click="edit(value.id)"><span class="glyphicon glyphicon-upload"></span> Upload</button>
+            </td>
+            <td>
+            <button data-toggle="modal" ng-click="edit(value.id)" data-target="#edit-data" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+            <button ng-click="remove(value,$index)" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Delete</button>
             </td>
         </tr>
     </tbody>
@@ -110,6 +127,37 @@
                     </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" ng-disabled="editItem.$invalid" class="btn btn-primary create-crud">Submit</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!-- Avatar Modal -->
+<div class="modal fade" id="avatar-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" name="addAvatar" role="form" ng-submit="saveImage()">
+                <input ng-model="form.id" type="hidden" placeholder="Name" name="name" class="form-control" />
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Avatar</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <strong>Image : </strong>
+                            <div class="form-group">
+                                <input ng-model="form.avatar" type="file" class="form-control input-lg" accept="image/*" onchange="angular.element(this).scope().uploadedFile(this)" style="width:400px" >
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit"  class="btn btn-primary">Submit</button>
                 </div>
             </div>
             </form>

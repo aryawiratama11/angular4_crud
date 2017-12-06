@@ -1,4 +1,4 @@
-var app =  angular.module('main-App',['ngRoute','angularUtils.directives.dirPagination']);
+var app =  angular.module('main-App',['ngRoute','angularUtils.directives.dirPagination', 'ngFlash']);
 
 app.config(['$routeProvider',
     function($routeProvider) {
