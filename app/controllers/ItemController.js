@@ -6,6 +6,11 @@ app.controller('ItemController', function(dataFactory,$scope,$http, Flash){
   $scope.totalItemsTemp = {};
   $scope.files = [];
 
+  //Cropper...
+  //$scope.myImage ='https://raw.githubusercontent.com/CrackerakiUA/ui-cropper/master/screenshots/live.jpg';
+  $scope.myImage ='';
+  $scope.myCroppedImage='';
+
   $scope.totalItems = 0;
   $scope.pageChanged = function(newPage) {
     getResultsPage(newPage);
@@ -86,13 +91,19 @@ app.controller('ItemController', function(dataFactory,$scope,$http, Flash){
     //console.log($scope.form);
     //$scope.form.avatar = [];
     //$scope.form.avatar = $scope.files[0];
+
+    var fileNew = dataURItoBlob($scope.myCroppedImage, $scope.currentFile.name);
+    $scope.fileNew = fileNew;
+    $scope.fileNew.name = $scope.currentFile.name;
+
+    //$scope.files[0] = $scope.fileNew;
     $http({
       method  : 'POST',
-      url     : URL + '/api/upload.php?id='+$scope.form.id,
+      url     : URL + '/api/upload.php?id='+$scope.form.id+'&name='+$scope.currentFile.name,
       processData: false,
       transformRequest: function (data) {
           var formData = new FormData();
-          formData.append("avatar", $scope.files[0]);  
+          formData.append("avatar", $scope.fileNew);  
           return formData;  
       },  
       data : $scope.form,
@@ -108,18 +119,6 @@ app.controller('ItemController', function(dataFactory,$scope,$http, Flash){
   }
 
 
-  $scope.uploadedFile = function(element) {
-    $scope.currentFile = element.files[0];
-    var reader = new FileReader();
-
-    reader.onload = function(event) {
-      $scope.image_source = event.target.result
-      $scope.$apply(function($scope) {
-        $scope.files = element.files;
-      });
-    }
-    reader.readAsDataURL(element.files[0]);
-  }
 
 
   $scope.removeImage = function(item){
@@ -142,5 +141,46 @@ app.controller('ItemController', function(dataFactory,$scope,$http, Flash){
       });
     }
   }
-   
+  
+  //Copper
+  $scope.uploadedFile = function(element) {
+
+    var ext = element.files[0].name.match(/\.(.+)$/)[1];
+    if(angular.lowercase(ext) !=='jpg' && angular.lowercase(ext) !=='jpeg' && angular.lowercase(ext) !=='png'){
+        alert("Invalid File Format");
+        document.getElementById('sbmtAvatar').disabled = true;
+        return false;
+    }  
+    document.getElementById('sbmtAvatar').disabled = false;
+    $scope.currentFile = element.files[0];
+    $scope.fileNew = {type:'image/jpeg'};
+    var reader = new FileReader();
+    $scope.cropped = {image: ''};
+    reader.onload = function(event) {
+      $scope.image_source = event.target.result;
+      $scope.$apply(function($scope) {
+        $scope.myImage = event.target.result;
+        $scope.files[0] = dataURItoBlob($scope.myImage, $scope.currentFile.name);
+        
+      });
+    }
+    reader.readAsDataURL($scope.currentFile);
+  }
+
+  var dataURItoBlob = function(dataURI, fileName) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+      byteString = atob(dataURI.split(',')[1]);
+    } else {
+      byteString = decodeURI(dataURI.split(',')[1]);
+    }
+    //var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var array = [];
+    for(var i = 0; i < byteString.length; i++) {
+      array.push(byteString.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {type: 'image/jpeg', name: fileName});
+  };
+
 });

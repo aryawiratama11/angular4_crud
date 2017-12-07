@@ -1,9 +1,12 @@
 <?php
 	require '../db_config.php';
-	//print_r($_FILES['avatar']);
+			
     if(!empty($_FILES['avatar'])){
-        $ext = pathinfo($_FILES['avatar']['name'],PATHINFO_EXTENSION);
-        $image = time().'.'.$ext;
+        //$ext = pathinfo($_REQUEST['name'],PATHINFO_EXTENSION);
+        $fileData = pathinfo($_REQUEST['name']);
+        $fileName = $fileData['filename'];
+        $ext = $fileData['extension'];
+        $image = $fileName . '_' .time().'.'.$ext;
         $id  = $_GET["id"];
         if(move_uploaded_file($_FILES["avatar"]["tmp_name"], __DIR__.'/../images/'.$image))
         {
